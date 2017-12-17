@@ -1,0 +1,22 @@
+{
+  "name": "scratch",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "npm run build-watch & npm run server",
+    "build-watch": "webpack -d --watch",
+    "server": "browser-sync start --server --files='dist/bundle.js,index.html' --no-notify"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-runtime": "^6.26.0",
+    "browser-sync": "^2.18.13",
+    "extract-text-webpack-plugin": "^3.0.2"
+  },
+  "dependencies": {
+    "css-loader": "^0.28.7",
+    "node-sass": "^4.7.2",
+    "sass-loader": "^6.0.6",
+    "webpack": "^3.9.1"
+  }
+}

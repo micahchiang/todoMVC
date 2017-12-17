@@ -1,0 +1,106 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #F2F2F2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  font-family: "Helvetica Neue";
+  font-weight: 100;
+  font-size: 14px;
+
+  .app__container {
+    width: 100%;
+    max-width: 550px;
+
+    .list__title {
+      font-size: 8em;
+      text-align: center;
+      color: rgba(175, 47, 47, 0.15);
+      margin: 0.5em 0 0;
+    }
+
+    .todo__input {
+      padding: 1em 2.5em;
+      border: none;
+      box-shadow: inset 0 -2px 1px rgba(0,0,0,0.03);
+      line-height: 1.4em;
+      width: 80%;
+      font-size: 1.5em;
+      font-weight: 100;
+      color: #858585;
+      &::placeholder {
+        letter-spacing: 1.5px;
+        font-weight: 100;
+        color: #F0F0F0;
+        font-style: italic;
+        background: rgba(0, 0, 0, 0.003);
+      }
+      &:focus {
+        outline: none;
+      }
+    }
+
+    #todoList {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      width: 99%;
+      .list__item {
+        background-color: #ffffff;
+        padding: 1.5em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .item__description {
+          margin: 0;
+          font-size: 1.5em;
+          flex-grow: 1;
+          transition: all .3s ease;
+        }
+
+        .item__completed {
+          text-decoration: line-through;
+          opacity: 0.5;
+        }
+
+        .done__btn {
+          margin-right: 10px;
+          -webkit-appearance: none;
+          border: 1px solid #ccc;
+          width: 35px;
+          height: 35px;
+          border-radius: 50%;
+          outline: none;
+          position: relative;
+          &:checked {
+            outline: none;
+            border: 1px solid #ffffff;
+            &:after {
+              content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="46.5" height="46.5" viewBox="-10 -18 100 135"><circle cx="50" cy="50" r="50" fill="none" stroke="#bddad5" stroke-width="3"/><path fill="#5dc2af" d="M72 25L42 71 27 56l-4 4 20 20 34-52z"/></svg>');
+              position: absolute;
+              left: -10px;
+              top: -7px;
+            }
+          }
+        }
+
+        .delete__btn {
+          opacity: 0;
+          transition: all .3s ease;
+          cursor: pointer;
+          color: rgba(175, 47, 47, 0.55);
+        }
+
+        &:hover {
+          .delete__btn {
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+
+}
