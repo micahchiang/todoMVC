@@ -4,8 +4,12 @@ export class TodoManager {
 
     constructor() {
         this.todoList = [];
+        this.itemsLeft = 0;
         this.todoInput = document.getElementById('todoInput');
         this.todoListView = document.getElementById('todoList');
+        this.todoFooter = document.getElementById('listFooter');
+        this.todoCounter = document.getElementById('counter');
+        this.toggleFooter();
         document.addEventListener('keypress', e => this.processTodo(e)); //use an arrow function to maintain scope of `this` as class.
     }
 
@@ -15,11 +19,11 @@ export class TodoManager {
             let todo = new Todo(val);
             this.todoList.push(todo);
             this.todoInput.value = '';
-            this.updateListView(todo);
+            this.addItem(todo);
         }
     }
 
-    updateListView(item) {
+    addItem(item) {
         let entry = document.createElement('li');
         let description = document.createElement('p');
         let doneButton = document.createElement('input');
@@ -40,6 +44,9 @@ export class TodoManager {
         entry.appendChild(description);
         entry.appendChild(deleteButton);
         this.todoListView.appendChild(entry);
+        this.itemsLeft++;
+        this.updateCounter();
+        this.toggleFooter();
     }
 
     removeItem(e) {
@@ -47,10 +54,15 @@ export class TodoManager {
         let node = e.target.parentNode;
         for(let [index, item] of this.todoList.entries()) {
             if (item.description === identifier) {
+                if (!item.isFinished) {
+                    this.itemsLeft --;
+                }
                 this.todoList.splice(index,1);
                 this.todoListView.removeChild(node);
             }
         }
+        this.updateCounter();
+        this.toggleFooter();
     }
 
     completeItem(e) {
@@ -59,11 +71,29 @@ export class TodoManager {
         for(let [index, item] of this.todoList.entries()) {
             if (item.description === identifier && !item.isFinished) {
                 item.isFinished = true;
+                this.itemsLeft--;
                 sibling.classList.add('item__completed');
-            } else {
+            } else if (item.description === identifier && item.isFinished) {
                 item.isFinished = false;
+                this.itemsLeft++;
                 sibling.classList.remove('item__completed');
             }
         }
+        this.updateCounter();
+    }
+
+    toggleFooter() {
+        if (this.todoList.length === 0) {
+            this.todoFooter.classList.add('hidden');
+        } else if (this.todoList.length > 0 && this.todoFooter.classList.contains('hidden')) {
+            this.todoFooter.classList.remove('hidden');
+        }
+    }
+
+    updateCounter() {
+        if (this.itemsLeft < 0) {
+            this.itemsLeft = 0;
+        }
+        this.todoCounter.innerHTML = `${this.itemsLeft}`;
     }
 }

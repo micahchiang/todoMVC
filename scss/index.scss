@@ -53,6 +53,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        border-bottom: 1px solid #e3e3e3;
 
         .item__description {
           margin: 0;
@@ -98,6 +99,43 @@
           .delete__btn {
             opacity: 1;
           }
+        }
+      }
+    }
+
+    .list__footer {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      background-color: #ffffff;
+      color: #bdbdbd;
+      font-weight: 100;
+      width: 88.9%;
+      padding: 1em 2em;
+
+      &.hidden {
+        display: none;
+      }
+
+      .list__counter {
+        flex-grow: 0.4;
+      }
+
+      .footer__btn {
+        margin: 0 7px;
+        border: 1px solid #ffffff;
+        border-radius: 3px;
+        color: #bdbdbd;
+        font-weight: 100;
+        outline: none;
+        padding: 0.5em;
+
+        &:hover {
+          border: 1px solid rgba(175, 47, 47, 0.15);
+        }
+
+        &:focus {
+          border: 1px solid rgba(175, 47, 47, 0.35);
         }
       }
     }
