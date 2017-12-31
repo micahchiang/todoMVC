@@ -5,12 +5,21 @@ export class TodoManager {
     constructor() {
         this.todoList = [];
         this.itemsLeft = 0;
+        // use these flags to reset classlist before filtering.
+        this.showActive = false;
+        this.showCompleted = false;
         this.todoInput = document.getElementById('todoInput');
         this.todoListView = document.getElementById('todoList');
         this.todoFooter = document.getElementById('listFooter');
         this.todoCounter = document.getElementById('counter');
+        this.showAllBtn = document.getElementById('showAllBtn');
+        this.showActiveBtn = document.getElementById('showActiveBtn');
+        this.showCompletedBtn = document.getElementById('showCompletedBtn');
         this.toggleFooter();
         document.addEventListener('keypress', e => this.processTodo(e)); //use an arrow function to maintain scope of `this` as class.
+        this.showAllBtn.addEventListener('click', e => this.toggleAll());
+        this.showActiveBtn.addEventListener('click', e => this.toggleActive());
+        this.showCompletedBtn.addEventListener('click', e => this.toggleCompleted());
     }
 
     processTodo(e) {
@@ -95,5 +104,54 @@ export class TodoManager {
             this.itemsLeft = 0;
         }
         this.todoCounter.innerHTML = `${this.itemsLeft}`;
+    }
+
+    toggleAll() {
+        // if a list item has the class list__item-hidden, remove it.
+        let listItems = document.getElementsByClassName('list__item');
+            for(let listItem of listItems) {
+                if (listItem && listItem.classList.contains('list__item-hidden')) {
+                    listItem.classList.remove('list__item-hidden');
+                }
+            }
+            this.showCompleted = false;
+            this.showActive = false;
+        }
+
+    toggleActive() {
+        // search list for all items with isFinished = true, grab them in dom, add display none;
+        // there's probably a better way to do this...
+        let listItems = document.getElementsByClassName('list__item');
+        if (this.showCompleted) {
+            this.toggleAll();
+        }
+        for(let todo of this.todoList) {
+            if (todo && todo.isFinished) {
+                for(let listItem of listItems) {
+                    if (listItem && listItem.children[1].innerText === todo.description) {
+                       listItem.classList.add('list__item-hidden');
+                    }
+                }
+            }
+        }
+        this.showActive = true;
+    }
+
+    toggleCompleted() {
+        // this is just the opposite of toggleActive;
+        let listItems = document.getElementsByClassName('list__item');
+        if (this.showActive) {
+            this.toggleAll();
+        }
+        for(let todo of this.todoList) {
+            if (todo && !todo.isFinished) {
+                for(let listItem of listItems) {
+                    if (listItem && listItem.children[1].innerText === todo.description) {
+                        listItem.classList.add('list__item-hidden');
+                    }
+                }
+            }
+        }
+        this.showCompleted = true;
     }
 }
