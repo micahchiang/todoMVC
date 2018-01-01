@@ -1,5 +1,5 @@
 {
-  "name": "scratch",
+  "name": "todomvc",
   "version": "0.0.1",
   "scripts": {
     "start": "npm run build-watch & npm run server",
