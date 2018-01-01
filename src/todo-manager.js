@@ -15,16 +15,21 @@ export class TodoManager {
         this.showAllBtn = document.getElementById('showAllBtn');
         this.showActiveBtn = document.getElementById('showActiveBtn');
         this.showCompletedBtn = document.getElementById('showCompletedBtn');
+        this.clearAllBtn = document.getElementById('clearAllCompletedBtn');
         this.toggleFooter();
         document.addEventListener('keypress', e => this.processTodo(e)); //use an arrow function to maintain scope of `this` as class.
         this.showAllBtn.addEventListener('click', e => this.toggleAll());
         this.showActiveBtn.addEventListener('click', e => this.toggleActive());
         this.showCompletedBtn.addEventListener('click', e => this.toggleCompleted());
+        this.clearAllBtn.addEventListener('click', e => this.clearAll());
     }
 
     processTodo(e) {
         if(e.keyCode === 13) {
             let val = this.todoInput.value;
+            if (val === '') {
+                return;
+            }
             let todo = new Todo(val);
             this.todoList.push(todo);
             this.todoInput.value = '';
@@ -88,6 +93,7 @@ export class TodoManager {
                 sibling.classList.remove('item__completed');
             }
         }
+        this.showClearAllBtn();
         this.updateCounter();
     }
 
@@ -104,6 +110,17 @@ export class TodoManager {
             this.itemsLeft = 0;
         }
         this.todoCounter.innerHTML = `${this.itemsLeft}`;
+    }
+
+    showClearAllBtn() {
+        for (let i = 0; i < this.todoList.length; i++) {
+            if (this.todoList[i].isFinished) {
+                this.clearAllBtn.classList.add('shown');
+                return;
+            } else {
+                this.clearAllBtn.classList.remove('shown');
+            }
+        }
     }
 
     toggleAll() {
@@ -153,5 +170,19 @@ export class TodoManager {
             }
         }
         this.showCompleted = true;
+    }
+
+    clearAll() {
+        let listItems = document.getElementsByClassName('list__item');
+        let counter = 0; // use this because removing nodes will shift index matching
+        for(counter; counter < this.todoList.length; counter++) {
+            if (this.todoList[counter].isFinished) {
+                this.todoListView.removeChild(listItems[counter]);
+                this.todoList.splice(counter,1);
+                counter = 0; // reset counter to match indexes
+                listItems = document.getElementsByClassName('list__item'); // reset list to match indexes
+            }
+        }
+        this.clearAllBtn.classList.remove('shown');
     }
 }

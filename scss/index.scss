@@ -122,7 +122,7 @@
       }
 
       .list__counter {
-        flex-grow: 0.4;
+        flex-grow: 1;
       }
 
       .footer__btn {
@@ -140,6 +140,26 @@
 
         &:focus {
           border: 1px solid rgba(175, 47, 47, 0.35);
+        }
+      }
+
+      .clear__all__btn {
+        margin: 0 7px 0 20px;
+        border: 1px solid #ffffff;
+        border-radius: 3px;
+        color: #bdbdbd;
+        font-weight: 100;
+        outline: none;
+        padding: 0.5em;
+        opacity: 0;
+
+        &:hover {
+          text-decoration: underline;
+          cursor: pointer;
+        }
+
+        &.shown {
+          opacity: 1;
         }
       }
     }
