@@ -1,8 +1,10 @@
-import {Todo} from './todo';
+import Todo from './todo';
+import Storage from './storage';
 
-export class TodoManager {
+export default class TodoManager {
 
-    constructor() {
+    constructor(storage) {
+        this.storage = storage;
         this.todoList = [];
         this.itemsLeft = 0;
         // use these flags to reset classlist before filtering.
@@ -30,20 +32,22 @@ export class TodoManager {
             if (val === '') {
                 return;
             }
-            let todo = new Todo(val);
+            let id = this.todoList.length+1;
+            let todo = new Todo(val, id);
             this.todoList.push(todo);
+            this.storage.insert(todo); // save to localstorage;
             this.todoInput.value = '';
-            this.addItem(todo);
+            this.addItemToView(todo);
         }
     }
 
-    addItem(item) {
+    addItemToView(item) {
         let entry = document.createElement('li');
         let description = document.createElement('p');
         let doneButton = document.createElement('input');
         let deleteButton = document.createElement('i');
         deleteButton.innerText = 'clear';
-        deleteButton.setAttribute('id', `${item.description}`);
+        deleteButton.setAttribute('id', `${item.id}`);
         deleteButton.addEventListener('click', e => this.removeItem(e));
         deleteButton.classList.add('material-icons');
         deleteButton.classList.add('delete__btn');
@@ -67,10 +71,11 @@ export class TodoManager {
         let identifier = e.target.id;
         let node = e.target.parentNode;
         for(let [index, item] of this.todoList.entries()) {
-            if (item.description === identifier) {
+            if (item.id == identifier) {
                 if (!item.isFinished) {
                     this.itemsLeft --;
                 }
+                this.storage.delete(item.id); // delete from localstorage
                 this.todoList.splice(index,1);
                 this.todoListView.removeChild(node);
             }
@@ -85,12 +90,14 @@ export class TodoManager {
         for(let [index, item] of this.todoList.entries()) {
             if (item.description === identifier && !item.isFinished) {
                 item.isFinished = true;
+                this.storage.toggleComplete(item.id, item.isFinished); // update status in localstorage
                 this.itemsLeft--;
                 sibling.classList.add('item__completed');
             } else if (item.description === identifier && item.isFinished) {
                 item.isFinished = false;
+                this.storage.toggleComplete(item.id, item.isFinished);
                 this.itemsLeft++;
-                sibling.classList.remove('item__completed');
+                sibling.classList.remove('item__completed'); // update status in localstorage
             }
         }
         this.showClearAllBtn();
@@ -109,7 +116,9 @@ export class TodoManager {
         if (this.itemsLeft < 0) {
             this.itemsLeft = 0;
         }
-        this.todoCounter.innerHTML = `${this.itemsLeft}`;
+        this.todoCounter.innerHTML = this.itemsLeft > 1 ?
+            `${this.itemsLeft} items left` :
+            `${this.itemsLeft} item left`;
     }
 
     showClearAllBtn() {
@@ -183,6 +192,7 @@ export class TodoManager {
                 listItems = document.getElementsByClassName('list__item'); // reset list to match indexes
             }
         }
+        this.storage.clearCompleted(); // remove all completed tasks from db
         this.clearAllBtn.classList.remove('shown');
     }
 }

@@ -1,5 +1,7 @@
-import {TodoManager} from './todo-manager';
+import TodoManager from './todo-manager';
+import Storage from './storage';
 
 window.onload = () => {
-    let manager = new TodoManager();
+    let storage = new Storage('todoDB');
+    let manager = new TodoManager(storage);
 }
