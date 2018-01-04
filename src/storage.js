@@ -46,11 +46,16 @@ export default class Storage {
 
     // clear all completed todos
     clearCompleted() {
-        const todoList = this.getLocalStorage().filter(todo => {
+        let todoList = this.getLocalStorage().filter(todo => {
             if (!todo.isFinished) {
                 return true;
             }
         });
-        this.setLocalStorage(todoList);
+        if (todoList.length < 1) {
+            todoList = [];
+            this.setLocalStorage(todoList);
+        } else {
+            this.setLocalStorage(todoList);
+        }
     }
 }
