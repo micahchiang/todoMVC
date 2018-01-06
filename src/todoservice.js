@@ -23,6 +23,11 @@ export default class TodoService {
         this.storage.insert(todo);
     }
 
+    // update the description of a task
+    updateTodo(id, desc) {
+        this.storage.update(id, desc);
+    }
+
     // remove a task
     removeTodo(id) {
         this.storage.delete(id);

@@ -68,6 +68,16 @@ export default class TodoController {
         this.toggleFooter();
     }
 
+    // TODO: add function that changes item from p to input in dom.
+
+    // called by another function that provides id and desc from dom.
+    updateItem(id, desc) {
+        let identifier = id;
+        let updatedDesc = desc;
+        this.service.updateTodo(id, desc);
+        this.todoList = this.service.list;
+    }
+
     removeItem(e) {
         let identifier = e.target.id;
         let node = e.target.parentNode;

@@ -21,6 +21,13 @@ export default class Storage {
         this.setLocalStorage(todoList);
     }
 
+    update(id, desc) {
+        const todoList = this.getLocalStorage();
+        let index = todoList.findIndex(x => x.id === id);
+        todoList[index].description = desc;
+        this.setLocalStorage(todoList);
+    }
+
     // update task's status
     toggleComplete(id, status) {
         const todoList = this.getLocalStorage();
