@@ -23,8 +23,11 @@ export default class Storage {
 
     update(id, desc) {
         const todoList = this.getLocalStorage();
-        let index = todoList.findIndex(x => x.id === id);
-        todoList[index].description = desc;
+        todoList.findIndex(todo => {
+            if(todo.id === id) {
+                todo.description = desc;
+            }
+        });
         this.setLocalStorage(todoList);
     }
 
